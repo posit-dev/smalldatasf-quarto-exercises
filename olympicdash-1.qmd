@@ -17,8 +17,8 @@ olympics_full = pd.read_csv("data/olympics.csv", low_memory = False)
 
 ```{python}
 #| label: prep-data
-# Filter for Summer season and non-NA medals
-olympics = olympics_full[(olympics_full["season"] == "Summer") & (olympics_full["medal"].notna())]
+# Filter for non-NA medals
+olympics = olympics_full.loc[olympics_full["medal"].notna()]
 
 # Split the team column at "-" into two columns
 split_data = olympics["team"].str.split("-", n = 1, expand = True)
@@ -26,6 +26,12 @@ olympics.loc[:, "team"] = split_data[0]
 
 # Reorder the medal column categories
 olympics.loc[:, "medal"] = pd.Categorical(olympics["medal"], categories = ["Bronze", "Silver", "Gold"])
+```
+
+```{python}
+#| label: summmer-prep-data
+olympics = olympics[(olympics["season"] == "Summer")]
+olympics.reset_index(drop=True, inplace=True)
 ```
 
 ## Medals by sport

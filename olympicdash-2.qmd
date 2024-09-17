@@ -23,21 +23,26 @@ olympics_full = pd.read_csv("data/olympics.csv", low_memory = False)
 
 ```{python}
 #| label: prep-data
-
-# Filter for Summer season and non-NA medals
-olympics = olympics_full[(olympics_full["season"] == "Summer") & (olympics_full["medal"].notna())]
+# Filter for non-NA medals
+olympics = olympics_full.loc[olympics_full["medal"].notna()]
 
 # Split the team column at "-" into two columns
 split_data = olympics["team"].str.split("-", n = 1, expand = True)
 olympics.loc[:, "team"] = split_data[0]
 
 # Reorder the medal column categories
-olympics["medal"] = pd.Categorical(olympics["medal"], categories = ["Bronze", "Silver", "Gold"])
+olympics.loc[:, "medal"] = pd.Categorical(olympics["medal"], categories = ["Bronze", "Silver", "Gold"])
+```
+
+```{python}
+#| label: summmer-prep-data
+olympics = olympics[(olympics["season"] == "Summer")]
+olympics.reset_index(drop=True, inplace=True)
 ```
 
 ## Column - Medals by sport and year
 
-### Row - Medals by sport {height=60%}
+### Row - Medals by sport
 
 ```{python}
 #| label: medals-by-sport
@@ -75,7 +80,7 @@ olympics["sport"] = olympics["sport"].cat.reorder_categories(new_order)
 )
 ```
 
-### Row - Medals by year {height=40%}
+### Row - Medals by year
 
 ```{python}
 #| label: medals-by-year
@@ -137,3 +142,73 @@ olympics_pivot.rename(columns={"team": "Team"}, inplace=True)
     gt.GT(olympics_pivot)
 )
 ```
+
+<!-- TODO for Step 2: Un-comment and use resulting variables for value boxes
+
+```{python}
+#| label: summer-calculate-most-medals
+
+# Filter for gold medals
+gold_medals = olympics[olympics['medal'] == 'Gold']
+# Group by team and count gold medals
+gold_medal_counts = gold_medals.groupby('team').size()
+# Find the team with the most gold medals
+most_gold_medals = gold_medal_counts.idxmax()
+count_most_gold_medals = gold_medal_counts.max()
+
+# Filter for silver medals
+silver_medals = olympics[olympics['medal'] == 'Silver']
+# Group by team and count silver medals
+silver_medal_counts = silver_medals.groupby('team').size()
+# Find the team with the most silver medals
+most_silver_medals = silver_medal_counts.idxmax()
+count_most_silver_medals = silver_medal_counts.max()
+
+# Filter for bronze medals
+bronze_medals = olympics[olympics['medal'] == 'Bronze']
+# Group by team and count bronze medals
+bronze_medal_counts = bronze_medals.groupby('team').size()
+# Find the team with the most bronze medals
+most_bronze_medals = bronze_medal_counts.idxmax()
+count_most_bronze_medals = bronze_medal_counts.max()
+```
+
+-->
+
+<!-- TODO for Step 3: Un-comment and use olympics_sorted_descending_top30 and olympics_sorted_ascending_bottom30 for tabset tables. 
+```{python}
+#| label: summer-medals-by-country
+#| title: Medals by country
+
+# Count the occurrences of each medal per team
+olympics_count = olympics.groupby(["team", "medal"]).size().reset_index(name="n")
+
+# Pivot olympics_count to get medals as columns
+olympics_pivot = olympics_count.pivot_table(index = "team", columns = "medal", values = "n", fill_value = 0)
+
+# Calculate the total number of medals
+olympics_pivot["Total"] = olympics_pivot[["Bronze", "Gold", "Silver"]].sum(axis=1)
+
+# Reset the index and rearrange columns
+olympics_pivot = olympics_pivot.reset_index()
+olympics_pivot = olympics_pivot[["team", "Gold", "Silver", "Bronze", "Total"]]
+
+# Sort by Total medals, then team
+olympics_sorted_descending = olympics_pivot.sort_values(by=["Total", "team"], ascending=[False, True])
+olympics_sorted_ascending = olympics_pivot.sort_values(by=["Total", "team"], ascending=[True, True])
+
+# Remove Total
+olympics_sorted_descending = olympics_sorted_descending[["team", "Gold", "Silver", "Bronze"]]
+olympics_sorted_ascending = olympics_sorted_ascending[["team", "Gold", "Silver", "Bronze"]]
+
+# Rename the team column to Team
+olympics_sorted_descending.rename(columns={"team": "Team"}, inplace=True)
+olympics_sorted_ascending.rename(columns={"team": "Team"}, inplace=True)
+
+# Find top and bottom 30
+olympics_sorted_descending_top30 = olympics_sorted_descending.head(30)
+olympics_sorted_descending_top30.reset_index(drop=True, inplace=True)
+olympics_sorted_ascending_bottom30 = olympics_sorted_ascending.head(30)
+olympics_sorted_ascending_bottom30.reset_index(drop=True, inplace=True)
+```
+-->

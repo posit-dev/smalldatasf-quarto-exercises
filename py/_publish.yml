@@ -1,4 +1,6 @@
-- source: olympicdash-py-3-answers.qmd
+- source: olympicdash-3-answers.qmd
   quarto-pub:
-    - id: bee0d5b2-e02a-4467-8ed4-ed736a1d743e
-      url: 'https://mine.quarto.pub/olympic-games-py'
+    - id: bc98079c-4080-42bd-91a2-b827775d2af0
+      url: 'https://saraaltman.quarto.pub/olympic-games'
+    - id: 25cdc6f2-e31a-43d2-bf6c-2d68a948345b
+      url: 'https://saraaltman.quarto.pub/olympic-games'
