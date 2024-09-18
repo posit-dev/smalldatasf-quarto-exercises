@@ -127,8 +127,8 @@ olympics["sport"] = olympics["sport"].cat.reorder_categories(new_order)
 
 ## Most gold medals
 
- ```{python}
- #| include: false
+```{python}
+#| include: false
 
 # Filter for gold medals
 gold_medals = olympics[olympics['medal'] == 'Gold']
@@ -137,8 +137,8 @@ gold_medal_counts = gold_medals.groupby('team').size()
 # Find the team with the most gold medals
 most_gold_medals = gold_medal_counts.idxmax()
 count_most_gold_medals = gold_medal_counts.max()
- ```
+```
 
-The most gold medals is `{python} str(count_most_gold_medals)`.
+The most gold medals won by a single team are `{python} str(count_most_gold_medals).`
 
 :::
