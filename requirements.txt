@@ -1,5 +1,8 @@
-great_tables==0.10.0
 ipykernel==6.29.5
 jupyter==1.0.0
+PyYAML==6.0.2
+nbclient==0.10.0
+nbformat==5.10.4
+great_tables==0.10.0
 pandas==2.2.2
 plotnine==0.13.6
