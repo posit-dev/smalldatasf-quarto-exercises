@@ -1,0 +1,10 @@
+- source: olympicdash-3-answers.qmd
+  quarto-pub:
+    - id: bc98079c-4080-42bd-91a2-b827775d2af0
+      url: 'https://saraaltman.quarto.pub/olympic-games'
+    - id: 25cdc6f2-e31a-43d2-bf6c-2d68a948345b
+      url: 'https://saraaltman.quarto.pub/olympic-games'
+- source: olympicdash-2-answers-plotly.qmd
+  quarto-pub:
+    - id: a7b636b8-1a42-4beb-88e7-545be00b95f7
+      url: 'https://saraaltman.quarto.pub/olympicdash-plotly'
