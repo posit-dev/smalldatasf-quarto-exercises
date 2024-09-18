@@ -1,0 +1,125 @@
+---
+title: Olympic Games
+format: html
+author: Your name here
+jupyter: python3
+theme: sketchy
+---
+
+# Introduction
+
+Let's explore Olympics data!
+
+## Packages
+
+For this analysis we'll use a few packages for visualization and data display.
+
+Here is some *Markdown text*.
+
+```{python}
+#| label: load-packages
+from plotnine import *
+import great_tables as gt
+import pandas as pd
+```
+
+## Data
+
+The dataset we'll use comes from a CSV file.
+
+```{python}
+#| label: load-data
+
+olympics_full = pd.read_csv("data/olympics.csv", low_memory=False)
+```
+
+The dataset records Olympic athlete details, including personal information (id, name, sex, age), physical attributes (height, weight), team and nationality (team, noc), and their participation in specific games (year, season, city, sport, event) along with any medals won.
+
+Let's take a peek at the data. The table below shows the first five rows of the `olympics_full` data frame.
+
+```{python}
+#| label: tbl-olympics-head
+#| tbl-cap: First five rows of the Olympics data frame.
+
+olympics_full.head()
+```
+
+We can prepare the data for analysis.
+
+```{python}
+#| label: prep-data
+# Filter for non-NA medals
+olympics = olympics_full.loc[olympics_full["medal"].notna()]
+
+# Split the team column at "-" into two columns
+split_data = olympics["team"].str.split("-", n=1, expand=True)
+olympics.loc[:, "team"] = split_data[0]
+
+# Reorder the medal column categories
+olympics.loc[:, "medal"] = pd.Categorical(
+    olympics["medal"], categories=["Bronze", "Silver", "Gold"]
+)
+```
+
+Let's view just the Summer data.
+
+```{python}
+#| label: summmer-prep-data
+#| echo: false
+olympics = olympics[(olympics["season"] == "Summer")]
+olympics.reset_index(drop=True, inplace=True)
+olympics.head()
+```
+
+# Visualizations
+
+## Medals by sport
+
+The figure below shows medals by sport.
+
+```{python}
+#| warning: false
+olympics['medal'] = pd.Categorical(
+    olympics['medal'], 
+    categories=["Gold", "Silver", "Bronze"], 
+    ordered=True
+)
+
+# Lump the sport column to top 15 categories, grouping others as Other
+top_15_sports = olympics["sport"].value_counts().nlargest(15).index
+olympics["sport"] = olympics["sport"].apply(
+    lambda x: x if x in top_15_sports else "Other"
+)
+
+# Convert the sport column to a categorical type with order based on frequency, and reverse the order
+olympics["sport"] = pd.Categorical(
+    olympics["sport"], categories=olympics["sport"].value_counts().index[::-1]
+)
+
+# Move the Other category of the sport column to the beginning
+new_order = ["Other"] + [
+    cat for cat in olympics["sport"].cat.categories if cat != "Other"
+]
+olympics["sport"] = olympics["sport"].cat.reorder_categories(new_order)
+
+# Plot
+(
+    ggplot(olympics, aes(x="sport", fill="medal"))
+    + geom_bar()
+    + coord_flip()
+    + guides(fill=guide_legend(reverse=True))
+    + scale_fill_manual(
+        values={"Gold": "#d4af37", "Silver": "#c0c0c0", "Bronze": "#cd7f32"}
+    )
+    + labs(x="", y="", fill="Medal")
+    + theme_minimal()
+    + theme(
+        legend_position="inside",
+        legend_position_inside=(0.9, 0.2),
+        legend_direction="horizontal",
+        legend_background=element_rect(fill="white", color="gray"),
+        figure_size=(10, 5),
+    )
+)
+```
+
