@@ -18,7 +18,7 @@ import pandas as pd
 
 ```{python}
 #| label: load-data
-olympics_full = pd.read_csv("../data/olympics.csv", low_memory = False)
+olympics_full = pd.read_csv("../data/olympics.csv", low_memory=False)
 ```
 
 ```{python}
@@ -27,11 +27,11 @@ olympics_full = pd.read_csv("../data/olympics.csv", low_memory = False)
 olympics = olympics_full.loc[olympics_full["medal"].notna()]
 
 # Split the team column at "-" into two columns
-split_data = olympics["team"].str.split("-", n = 1, expand = True)
+split_data = olympics["team"].str.split("-", n=1, expand=True)
 olympics.loc[:, "team"] = split_data[0]
 
 # Reorder the medal column categories
-olympics.loc[:, "medal"] = pd.Categorical(olympics["medal"], categories = ["Bronze", "Silver", "Gold"])
+olympics.loc[:, "medal"] = pd.Categorical(olympics["medal"], categories=["Bronze", "Silver", "Gold"])
 ```
 
 ```{python}
@@ -64,22 +64,22 @@ olympics["sport"] = olympics["sport"].cat.reorder_categories(new_order)
     ggplot(olympics, aes(x = "sport", fill = "medal")) +
     geom_bar() +
     coord_flip() +
-    guides(fill = guide_legend(reverse = True)) +
+    guides(fill=guide_legend(reverse=True)) +
     scale_fill_manual(
-        values = {"Gold":"#d4af37", "Silver":"#c0c0c0", "Bronze":"#cd7f32"}
+        values={"Gold":"#d4af37", "Silver":"#c0c0c0", "Bronze":"#cd7f32"}
     ) + 
     labs(
-        x = "",
-        y = "",
-        fill = "Medal"
+        x="",
+        y="",
+        fill="Medal"
     ) +
     theme_minimal() +
     theme(
-        legend_position = "inside",
-        legend_position_inside = (0.9, 0.2),
-        legend_direction = "horizontal",
-        legend_background = element_rect(fill = "white", color = "gray"),
-        figure_size = (10, 6.18)
+        legend_position="inside",
+        legend_position_inside=(0.9, 0.2),
+        legend_direction="horizontal",
+        legend_background=element_rect(fill="white", color="gray"),
+        figure_size=(10, 6.18)
     )
 )
 ```
@@ -94,29 +94,29 @@ Due to World War II, no olympic games were held in 1940 and 1944.
 #| title: Medals by year
 
 # Count the occurrences of each medal per year
-olympics_count = olympics.groupby(["year", "medal"], observed=True).size().reset_index(name = "n")
+olympics_count=olympics.groupby(["year", "medal"], observed=True).size().reset_index(name="n")
 
 # Plot
 (
-    ggplot(olympics_count, aes(x = "year", y = "n", color = "medal")) +
-    geom_point(size = 0.5) +
+    ggplot(olympics_count, aes(x="year", y="n", color="medal")) +
+    geom_point(size=0.5) +
     geom_line() +
-    guides(color = guide_legend(reverse = True)) + 
-    scale_x_continuous(breaks = range(1896, 2020, 8)) +
+    guides(color=guide_legend(reverse=True)) + 
+    scale_x_continuous(breaks=range(1896, 2020, 8)) +
     scale_color_manual(
-        values = {"Gold":"#d4af37", "Silver":"#c0c0c0", "Bronze":"#cd7f32"}
+        values={"Gold":"#d4af37", "Silver":"#c0c0c0", "Bronze":"#cd7f32"}
     ) + 
     scale_fill_manual(
-        values = {"Gold":"#d4af37", "Silver":"#c0c0c0", "Bronze":"#cd7f32"}
+        values={"Gold":"#d4af37", "Silver":"#c0c0c0", "Bronze":"#cd7f32"}
     ) +
-    labs(x = "Year", y = "", color = "Medal") +
+    labs(x="Year", y="", color="Medal") +
     theme_minimal() +
     theme(
-        legend_position = "inside",
-        legend_position_inside = (0.9, 0.2),
-        legend_direction = "horizontal",
-        legend_background = element_rect(fill = "white", color = "gray"),
-        figure_size = (10, 3)
+        legend_position="inside",
+        legend_position_inside=(0.9, 0.2),
+        legend_direction="horizontal",
+        legend_background=element_rect(fill="white", color="gray"),
+        figure_size=(10, 3)
     )
 )
 ```
@@ -181,8 +181,7 @@ Most bronzes:
 ### Row - Tabsets of tables {height=70% .tabset}
 
 ```{python}
-#| label: summer-medals-by-country
-#| title: Medals by country
+#| label: summer-team-total-medals
 
 # Count the occurrences of each medal per team
 olympics_count = olympics.groupby(["team", "medal"]).size().reset_index(name="n")
