@@ -30,7 +30,7 @@ The dataset we'll use comes from a CSV file.
 ```{python}
 #| label: load-data
 
-olympics_full = pd.read_csv("data/olympics.csv", low_memory=False)
+olympics_full = pd.read_csv("../data/olympics.csv", low_memory=False)
 ```
 
 The dataset records Olympic athlete details, including personal information (id, name, sex, age), physical attributes (height, weight), team and nationality (team, noc), and their participation in specific games (year, season, city, sport, event) along with any medals won.
