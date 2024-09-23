@@ -6,3 +6,4 @@ nbformat==5.10.4
 great_tables==0.10.0
 pandas==2.2.2
 plotnine==0.13.6
+plotly==5.24.1 
