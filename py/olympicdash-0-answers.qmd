@@ -80,6 +80,7 @@ olympics.head()
 The figure below shows medals by sport.
 
 ```{python}
+#| label: medals-by-sport
 #| warning: false
 olympics['medal'] = pd.Categorical(
     olympics['medal'], 
@@ -128,6 +129,7 @@ olympics["sport"] = olympics["sport"].cat.reorder_categories(new_order)
 ## Most gold medals
 
 ```{python}
+#| label: most-gold-medals
 #| include: false
 
 # Filter for gold medals
@@ -139,6 +141,6 @@ most_gold_medals = gold_medal_counts.idxmax()
 count_most_gold_medals = gold_medal_counts.max()
 ```
 
-The most gold medals won by a single team are `{python} str(count_most_gold_medals).`
+The most gold medals won by a single team are `{python} str(count_most_gold_medals)`.
 
 :::
